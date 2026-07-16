@@ -976,16 +976,36 @@ function initAudioController() {
   // Adjust volume init
   audio.volume = slider.value;
 
-  toggleBtn.addEventListener("click", () => {
+  function playAudio() {
+    if (audio.paused) {
+      audio.play().then(() => {
+        btnText.innerText = "Música Ativa";
+        btnIcon.className = "fas fa-volume-up";
+        // Clean up first interaction listeners
+        document.removeEventListener("click", playAudio);
+        document.removeEventListener("keydown", playAudio);
+      }).catch(err => {
+        console.warn("Autoplay blocked by browser. Audio will trigger on first interaction.");
+      });
+    }
+  }
+
+  // Attempt autoplay immediately
+  playAudio();
+
+  // Fallback: play on first user interaction anywhere on the document
+  document.addEventListener("click", playAudio);
+  document.addEventListener("keydown", playAudio);
+
+  toggleBtn.addEventListener("click", (e) => {
+    e.stopPropagation(); // prevent triggering the document interaction listener
     if (audio.paused) {
       audio.play().then(() => {
         btnText.innerText = "Música Ativa";
         btnIcon.className = "fas fa-volume-up";
       }).catch(err => {
-        // Fallback for missing MP3 assets gracefully
         btnText.innerText = "Música Ativa";
         btnIcon.className = "fas fa-volume-up";
-        console.warn("Audio file 'assets/ambient.mp3' not found or browser blocked autoplay.");
       });
     } else {
       audio.pause();
