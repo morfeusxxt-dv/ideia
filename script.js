@@ -842,6 +842,18 @@ function startGardenLoop() {
    ========================================================================== */
 let activeLineIndexes = [];
 
+function initConstellationStage() {
+  window.addEventListener("resize", () => {
+    if (STATE.currentStage === 4) {
+      if (STATE.traitsClicked === STATE.totalTraits) {
+        drawFullHeartConstellation();
+      } else {
+        drawConstellationLine();
+      }
+    }
+  });
+}
+
 function populateConstellationStars() {
   const container = document.getElementById("starsContainer");
   const svg = document.getElementById("constellationSvg");
