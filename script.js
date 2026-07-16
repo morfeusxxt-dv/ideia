@@ -691,11 +691,14 @@ function startGardenLoop() {
     gardenCtx.clearRect(0, 0, gardenCanvas.width, gardenCanvas.height);
 
     flowers.forEach(f => {
-      // Growth simulation
-      if (f.currentHeight < f.targetHeight) {
+      // Growth simulation - Fix asymptotic bug
+      if (f.targetHeight - f.currentHeight > 1) {
         f.currentHeight += (f.targetHeight - f.currentHeight) * f.speed;
-      } else if (f.bloomProgress < 1) {
-        f.bloomProgress += 0.03;
+      } else {
+        f.currentHeight = f.targetHeight; // Snap to target
+        if (f.bloomProgress < 1) {
+          f.bloomProgress += 0.04;
+        }
       }
 
       // Wind sway calculations (sine wave propagation)
@@ -703,26 +706,41 @@ function startGardenLoop() {
       const topX = f.x + sway;
       const topY = gardenCanvas.height - f.currentHeight;
 
-      // Draw Stem
+      // Draw Stem with gradient
+      const stemGrad = gardenCtx.createLinearGradient(f.x, gardenCanvas.height, topX, topY);
+      stemGrad.addColorStop(0, "rgba(39, 174, 96, 0.6)");
+      stemGrad.addColorStop(1, "rgba(46, 204, 113, 0.8)");
+
       gardenCtx.beginPath();
       gardenCtx.moveTo(f.x, gardenCanvas.height);
-      // Quadratic curve for elegant bowing
       gardenCtx.quadraticCurveTo(
-        f.x + sway * 0.5, 
+        f.x + sway * 0.4, 
         gardenCanvas.height - f.currentHeight * 0.5, 
         topX, 
         topY
       );
-      gardenCtx.strokeStyle = "rgba(46, 204, 113, 0.4)";
+      gardenCtx.strokeStyle = stemGrad;
       gardenCtx.lineWidth = f.width;
+      gardenCtx.lineCap = "round";
       gardenCtx.stroke();
 
-      // Draw Leaves
-      if (f.currentHeight > f.targetHeight * 0.5) {
-        gardenCtx.fillStyle = "rgba(46, 204, 113, 0.35)";
+      // Draw Leaves along the stem
+      if (f.currentHeight > f.targetHeight * 0.4) {
+        const leafY1 = gardenCanvas.height - f.currentHeight * 0.35;
+        const leafX1 = f.x + sway * 0.35;
+        const leafY2 = gardenCanvas.height - f.currentHeight * 0.65;
+        const leafX2 = f.x + sway * 0.65;
+
+        gardenCtx.fillStyle = "rgba(46, 204, 113, 0.65)";
+        
+        // Leaf 1 (Left)
         gardenCtx.beginPath();
-        gardenCtx.ellipse(f.x + sway * 0.4 - 8, gardenCanvas.height - f.currentHeight * 0.4, 6, 3, Math.PI / 4, 0, Math.PI * 2);
-        gardenCtx.ellipse(f.x + sway * 0.4 + 8, gardenCanvas.height - f.currentHeight * 0.4, 6, 3, -Math.PI / 4, 0, Math.PI * 2);
+        gardenCtx.ellipse(leafX1 - 10, leafY1, 10, 5, -Math.PI / 6, 0, Math.PI * 2);
+        gardenCtx.fill();
+
+        // Leaf 2 (Right)
+        gardenCtx.beginPath();
+        gardenCtx.ellipse(leafX2 + 10, leafY2, 10, 5, Math.PI / 6, 0, Math.PI * 2);
         gardenCtx.fill();
       }
 
@@ -732,54 +750,56 @@ function startGardenLoop() {
         gardenCtx.save();
         gardenCtx.translate(topX, topY);
 
-        // Draw petals
-        gardenCtx.fillStyle = f.headColor;
-        gardenCtx.shadowBlur = 15;
+        // Petal glow styling
+        gardenCtx.shadowBlur = 20;
         gardenCtx.shadowColor = f.headColor;
         
         if (f.type === 0) {
           // Type 0: Daisy shape petals
-          const petalsCount = 8;
+          gardenCtx.fillStyle = f.headColor;
+          const petalsCount = 10; // more petals for density
           for (let i = 0; i < petalsCount; i++) {
             gardenCtx.rotate((Math.PI * 2) / petalsCount);
             gardenCtx.beginPath();
-            gardenCtx.ellipse(radius * 0.55, 0, radius * 0.55, radius * 0.22, 0, 0, Math.PI * 2);
+            gardenCtx.ellipse(radius * 0.5, 0, radius * 0.5, radius * 0.18, 0, 0, Math.PI * 2);
             gardenCtx.fill();
           }
-          // Center gold seed
+          // Center gold seed with soft glow
           gardenCtx.beginPath();
-          gardenCtx.arc(0, 0, radius * 0.35, 0, Math.PI * 2);
+          gardenCtx.arc(0, 0, radius * 0.28, 0, Math.PI * 2);
           gardenCtx.fillStyle = "var(--color-accent-gold)";
           gardenCtx.shadowColor = "var(--color-accent-gold)";
           gardenCtx.fill();
         } else if (f.type === 1) {
           // Type 1: Rose/Lotus layered shape
           // Outer circles
+          gardenCtx.fillStyle = f.headColor;
           for (let i = 0; i < 6; i++) {
             gardenCtx.beginPath();
-            gardenCtx.arc(Math.cos(i * Math.PI / 3) * radius * 0.35, Math.sin(i * Math.PI / 3) * radius * 0.35, radius * 0.45, 0, Math.PI * 2);
+            gardenCtx.arc(Math.cos(i * Math.PI / 3) * radius * 0.35, Math.sin(i * Math.PI / 3) * radius * 0.35, radius * 0.42, 0, Math.PI * 2);
             gardenCtx.fill();
           }
           // Inner glow details
           gardenCtx.fillStyle = "#ffffff";
-          gardenCtx.globalAlpha = 0.5;
+          gardenCtx.globalAlpha = 0.6;
           for (let i = 0; i < 5; i++) {
             gardenCtx.beginPath();
-            gardenCtx.arc(Math.cos(i * Math.PI / 2.5) * radius * 0.18, Math.sin(i * Math.PI / 2.5) * radius * 0.18, radius * 0.3, 0, Math.PI * 2);
+            gardenCtx.arc(Math.cos(i * Math.PI / 2.5) * radius * 0.16, Math.sin(i * Math.PI / 2.5) * radius * 0.18, radius * 0.28, 0, Math.PI * 2);
             gardenCtx.fill();
           }
           gardenCtx.globalAlpha = 1.0;
           gardenCtx.beginPath();
-          gardenCtx.arc(0, 0, radius * 0.2, 0, Math.PI * 2);
+          gardenCtx.arc(0, 0, radius * 0.15, 0, Math.PI * 2);
           gardenCtx.fillStyle = "var(--color-accent-gold)";
           gardenCtx.fill();
         } else {
           // Type 2: Star Flower
-          const points = 5;
+          gardenCtx.fillStyle = f.headColor;
+          const points = 6;
           gardenCtx.beginPath();
           for (let i = 0; i < points * 2; i++) {
             const angle = (i * Math.PI) / points;
-            const r = i % 2 === 0 ? radius : radius * 0.45;
+            const r = i % 2 === 0 ? radius : radius * 0.4;
             gardenCtx.lineTo(Math.cos(angle) * r, Math.sin(angle) * r);
           }
           gardenCtx.closePath();
@@ -787,7 +807,7 @@ function startGardenLoop() {
 
           // center glow
           gardenCtx.beginPath();
-          gardenCtx.arc(0, 0, radius * 0.22, 0, Math.PI * 2);
+          gardenCtx.arc(0, 0, radius * 0.2, 0, Math.PI * 2);
           gardenCtx.fillStyle = "#ffffff";
           gardenCtx.fill();
         }
@@ -795,6 +815,22 @@ function startGardenLoop() {
         gardenCtx.restore();
       }
     });
+
+    // Draw some subtle blades of glowing grass at the bottom
+    for (let x = 0; x < gardenCanvas.width; x += 15) {
+      const grassSway = Math.sin(gardenTime + x * 0.05) * 4;
+      gardenCtx.beginPath();
+      gardenCtx.moveTo(x, gardenCanvas.height);
+      gardenCtx.quadraticCurveTo(
+        x + grassSway * 0.5, 
+        gardenCanvas.height - 15, 
+        x + grassSway, 
+        gardenCanvas.height - 25
+      );
+      gardenCtx.strokeStyle = "rgba(46, 204, 113, 0.25)";
+      gardenCtx.lineWidth = 1.5;
+      gardenCtx.stroke();
+    }
 
     requestAnimationFrame(renderGarden);
   }
