@@ -904,6 +904,27 @@ body:active .custom-cursor-glow {
   }
 }
 
+.stage-step-tag {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-accent-rose);
+  opacity: 0.8;
+  margin-bottom: 12px;
+}
+
+.stage-instruction {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 15px;
+  text-align: center;
+}
+
 /* ==========================================================================
    MEDIA QUERIES (RESPONSIVENESS)
    ========================================================================== */

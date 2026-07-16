@@ -118,14 +118,14 @@ function initCosmicCanvas() {
   moonY = cosmicCanvas.height * 0.25;
 
   // Initialize stars structure (initially invisible opacity)
-  for (let i = 0; i < 400; i++) {
+  for (let i = 0; i < 500; i++) {
     stars.push({
       x: Math.random() * cosmicCanvas.width,
       y: Math.random() * cosmicCanvas.height,
-      size: Math.random() * 1.5 + 0.5,
+      size: Math.random() * 2.8 + 1.2,
       opacity: 0,
-      targetOpacity: Math.random() * 0.8 + 0.2,
-      flickerSpeed: Math.random() * 0.02 + 0.005,
+      targetOpacity: Math.random() * 0.85 + 0.25,
+      flickerSpeed: Math.random() * 0.025 + 0.005,
       color: Math.random() > 0.8 ? "var(--color-accent-gold)" : (Math.random() > 0.8 ? "#93c5fd" : "#ffffff")
     });
   }
@@ -162,14 +162,14 @@ function initCosmicCanvas() {
     // Draw stars
     stars.forEach(star => {
       // Twinkle opacity calculation
-      let osc = Math.sin(time * 500 * star.flickerSpeed) * 0.15;
+      let osc = Math.sin(time * 500 * star.flickerSpeed) * 0.2;
       let alpha = star.opacity + osc;
       if (alpha < 0) alpha = 0;
       if (alpha > 1) alpha = 1;
 
       // Apply zoom & parallax logic
-      let dx = (star.x - cosmicCanvas.width / 2) * spaceZoomFactor + cosmicCanvas.width / 2 - parallaxX * (star.size * 0.4);
-      let dy = (star.y - cosmicCanvas.height / 2) * spaceZoomFactor + cosmicCanvas.height / 2 - parallaxY * (star.size * 0.4);
+      let dx = (star.x - cosmicCanvas.width / 2) * spaceZoomFactor + cosmicCanvas.width / 2 - parallaxX * (star.size * 0.45);
+      let dy = (star.y - cosmicCanvas.height / 2) * spaceZoomFactor + cosmicCanvas.height / 2 - parallaxY * (star.size * 0.45);
 
       // Wrap-around bounds checking
       if (dx < 0) dx += cosmicCanvas.width;
@@ -177,11 +177,22 @@ function initCosmicCanvas() {
       if (dy < 0) dy += cosmicCanvas.height;
       if (dy > cosmicCanvas.height) dy -= cosmicCanvas.height;
 
+      ctx.save();
       ctx.fillStyle = star.color;
       ctx.globalAlpha = alpha;
       ctx.beginPath();
       ctx.arc(dx, dy, star.size, 0, Math.PI * 2);
       ctx.fill();
+
+      // Additional glow for larger stars
+      if (star.size > 2.0) {
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = star.color;
+        ctx.beginPath();
+        ctx.arc(dx, dy, star.size * 0.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
     });
 
     // Draw moon
@@ -284,6 +295,25 @@ function drawMoon() {
   ctx.arc(mx, my, moonRadius, 0, Math.PI * 2);
   ctx.fillStyle = grad;
   ctx.fill();
+
+  // Draw realistic craters before destination-out composite
+  ctx.fillStyle = STATE.easterEggActive ? "rgba(229, 80, 50, 0.1)" : "rgba(0, 0, 0, 0.08)";
+  const craterSeeds = [
+    { cx: -0.2, cy: -0.3, r: 0.16 },
+    { cx: 0.25, cy: 0.25, r: 0.12 },
+    { cx: -0.05, cy: 0.35, r: 0.14 },
+    { cx: 0.3, cy: -0.15, r: 0.09 },
+    { cx: -0.1, cy: 0.05, r: 0.2 }
+  ];
+  craterSeeds.forEach(c => {
+    ctx.beginPath();
+    ctx.arc(mx + moonRadius * c.cx, my + moonRadius * c.cy, moonRadius * c.r, 0, Math.PI * 2);
+    ctx.fill();
+    // Inner shadow details
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.06)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
 
   // Subtracting shadow overlap to make it a crescent moon shape
   ctx.shadowBlur = 0;
@@ -620,15 +650,16 @@ function plantFlower(x, y) {
   // Add flower object
   flowers.push({
     x: x,
-    targetHeight: gardenCanvas.height * (0.3 + Math.random() * 0.4),
+    targetHeight: gardenCanvas.height * (0.35 + Math.random() * 0.4),
     currentHeight: 0,
-    width: Math.random() * 3 + 2,
+    width: Math.random() * 2 + 2,
     headColor: getRandomFlowerColor(),
     bloomProgress: 0,
-    bloomSize: Math.random() * 8 + 8,
+    bloomSize: Math.random() * 12 + 15,
     phase: Math.random() * Math.PI * 2,
-    swayAmplitude: Math.random() * 15 + 8,
-    speed: 0.05 + Math.random() * 0.05
+    swayAmplitude: Math.random() * 12 + 6,
+    speed: 0.04 + Math.random() * 0.02,
+    type: Math.floor(Math.random() * 3) // 3 distinct types
   });
 
   // Check if target reached
@@ -703,21 +734,63 @@ function startGardenLoop() {
 
         // Draw petals
         gardenCtx.fillStyle = f.headColor;
-        gardenCtx.shadowBlur = 10;
+        gardenCtx.shadowBlur = 15;
         gardenCtx.shadowColor = f.headColor;
         
-        for (let i = 0; i < 5; i++) {
+        if (f.type === 0) {
+          // Type 0: Daisy shape petals
+          const petalsCount = 8;
+          for (let i = 0; i < petalsCount; i++) {
+            gardenCtx.rotate((Math.PI * 2) / petalsCount);
+            gardenCtx.beginPath();
+            gardenCtx.ellipse(radius * 0.55, 0, radius * 0.55, radius * 0.22, 0, 0, Math.PI * 2);
+            gardenCtx.fill();
+          }
+          // Center gold seed
           gardenCtx.beginPath();
-          gardenCtx.ellipse(0, 0, radius, radius * 0.4, (i * Math.PI * 2) / 5, 0, Math.PI * 2);
+          gardenCtx.arc(0, 0, radius * 0.35, 0, Math.PI * 2);
+          gardenCtx.fillStyle = "var(--color-accent-gold)";
+          gardenCtx.shadowColor = "var(--color-accent-gold)";
+          gardenCtx.fill();
+        } else if (f.type === 1) {
+          // Type 1: Rose/Lotus layered shape
+          // Outer circles
+          for (let i = 0; i < 6; i++) {
+            gardenCtx.beginPath();
+            gardenCtx.arc(Math.cos(i * Math.PI / 3) * radius * 0.35, Math.sin(i * Math.PI / 3) * radius * 0.35, radius * 0.45, 0, Math.PI * 2);
+            gardenCtx.fill();
+          }
+          // Inner glow details
+          gardenCtx.fillStyle = "#ffffff";
+          gardenCtx.globalAlpha = 0.5;
+          for (let i = 0; i < 5; i++) {
+            gardenCtx.beginPath();
+            gardenCtx.arc(Math.cos(i * Math.PI / 2.5) * radius * 0.18, Math.sin(i * Math.PI / 2.5) * radius * 0.18, radius * 0.3, 0, Math.PI * 2);
+            gardenCtx.fill();
+          }
+          gardenCtx.globalAlpha = 1.0;
+          gardenCtx.beginPath();
+          gardenCtx.arc(0, 0, radius * 0.2, 0, Math.PI * 2);
+          gardenCtx.fillStyle = "var(--color-accent-gold)";
+          gardenCtx.fill();
+        } else {
+          // Type 2: Star Flower
+          const points = 5;
+          gardenCtx.beginPath();
+          for (let i = 0; i < points * 2; i++) {
+            const angle = (i * Math.PI) / points;
+            const r = i % 2 === 0 ? radius : radius * 0.45;
+            gardenCtx.lineTo(Math.cos(angle) * r, Math.sin(angle) * r);
+          }
+          gardenCtx.closePath();
+          gardenCtx.fill();
+
+          // center glow
+          gardenCtx.beginPath();
+          gardenCtx.arc(0, 0, radius * 0.22, 0, Math.PI * 2);
+          gardenCtx.fillStyle = "#ffffff";
           gardenCtx.fill();
         }
-
-        // Center golden seed
-        gardenCtx.beginPath();
-        gardenCtx.arc(0, 0, radius * 0.35, 0, Math.PI * 2);
-        gardenCtx.fillStyle = "var(--color-accent-gold)";
-        gardenCtx.shadowColor = "var(--color-accent-gold)";
-        gardenCtx.fill();
 
         gardenCtx.restore();
       }

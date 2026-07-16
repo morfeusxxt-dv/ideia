@@ -46,7 +46,7 @@
 
   <!-- Audio Player Elements -->
   <audio id="bgMusic" loop>
-    <source src="assets/ambient.mp3" type="audio/mpeg">
+    <source src="https://assets.codepen.io/25868/ambient_piano.mp3" type="audio/mpeg">
   </audio>
 
   <!-- Canvas Background for Cosmic Effects -->
@@ -75,6 +75,7 @@
           <p class="intro-text" id="intro-p1">Algumas pessoas inspiram mensagens.</p>
           <p class="intro-text" id="intro-p2">Outras inspiram algo muito maior.</p>
         </div>
+        <div class="stage-instruction" id="intro-instruction">Olhe atentamente para o céu estrelado...</div>
         <button class="btn-premium hidden" id="btn-start">
           <span class="btn-glow"></span>
           <span class="btn-content">Começar experiência</span>
@@ -85,8 +86,10 @@
     <!-- STAGE 1: Reveal Jaci + Heart Constellation -->
     <section class="stage" id="stage-reveal">
       <div class="reveal-content">
+        <div class="stage-step-tag">Etapa 1 de 5</div>
         <h1 class="target-name" id="reveal-name"></h1>
         <p class="reveal-subtitle" id="reveal-subtitle">o brilho mais bonito do céu.</p>
+        <div class="stage-instruction active">Observe o nome se formar e gerar luz.</div>
         <button class="btn-premium hidden" id="btn-to-letter">
           <span class="btn-glow"></span>
           <span class="btn-content">Abrir correspondência <i class="fas fa-arrow-right"></i></span>
@@ -97,6 +100,7 @@
     <!-- STAGE 2: Envelope / Letter 3D -->
     <section class="stage" id="stage-letter">
       <div class="letter-container">
+        <div class="stage-step-tag">Etapa 2 de 5</div>
         <!-- 3D Envelope Wrapper -->
         <div class="envelope-wrapper" id="envelopeWrapper">
           <div class="envelope">
@@ -118,7 +122,7 @@
         </div>
         
         <div class="letter-instructions">
-          <p id="envelope-tip">Clique no envelope para abrir a carta</p>
+          <p id="envelope-tip">Clique no envelope acima para abrir e ler a carta (use a barra de rolagem na carta para ler tudo)</p>
         </div>
 
         <button class="btn-premium hidden" id="btn-to-garden">
@@ -132,8 +136,9 @@
     <section class="stage" id="stage-garden">
       <div class="garden-wrapper">
         <div class="glass-panel garden-header">
+          <div class="stage-step-tag">Etapa 3 de 5</div>
           <h2>Um Jardim para Florescer</h2>
-          <p>Clique em qualquer lugar da tela para plantar uma flor. Dê vida a este espaço.</p>
+          <p>Instrução: Clique em diferentes áreas da tela para plantar flores até completar 30.</p>
           <div class="counter-display"><span id="flower-count">0</span> / 30 flores</div>
         </div>
 
@@ -154,8 +159,9 @@
     <section class="stage" id="stage-constellation">
       <div class="constellation-wrapper">
         <div class="glass-panel constellation-header">
+          <div class="stage-step-tag">Etapa 4 de 5</div>
           <h2>Suas Estrelas Guia</h2>
-          <p>Clique nas estrelas dispersas no céu para descobrir e conectar suas maiores qualidades.</p>
+          <p>Instrução: Clique em cada uma das estrelas espalhadas para revelar suas qualidades e desenhar a constelação.</p>
           <div class="traits-counter"><span id="traits-count">0</span> / 7 qualidades</div>
         </div>
 
@@ -181,6 +187,7 @@
     <section class="stage" id="stage-final">
       <div class="final-wrapper">
         <div class="final-content glass">
+          <div class="stage-step-tag">Etapa final</div>
           <h2 class="final-title">Jaci...</h2>
           <div class="final-text-container">
             <p class="final-p">Algumas pessoas passam pela nossa vida como estrelas.</p>
