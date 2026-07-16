@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="moonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="60%" stop-color="#eae6df" />
+      <stop offset="100%" stop-color="#b5ad9e" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="16" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <!-- Beautiful crescent moon -->
+  <path d="M375.3 361.4c-81 0-146.7-65.7-146.7-146.7 0-46.7 21.8-88.3 55.7-115.3C271.7 97.4 257.9 96 244 96c-110.5 0-200 89.5-200 200s89.5 200 200 200c81.8 0 152.4-49.1 182.9-119.3-16.7 9.8-36.2 14.7-51.6 14.7z" fill="url(#moonGrad)" filter="url(#glow)" />
+</svg>

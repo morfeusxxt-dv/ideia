@@ -1,0 +1,987 @@
+/* ==========================================================================
+   RESET & ROOT STYLES
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg-base: #020208;
+  --color-bg-gradient: linear-gradient(135deg, #020208 0%, #05051a 50%, #0d0c2b 100%);
+  --color-text-primary: #f5f5f7;
+  --color-text-secondary: #a1a1a6;
+  --color-accent-gold: #e5c158;
+  --color-accent-silver: #d2d2d7;
+  --color-accent-rose: #fca5a5;
+  --color-glass-bg: rgba(10, 10, 25, 0.45);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Outfit', 'Inter', sans-serif;
+  
+  --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: all 0.3s ease;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  position: relative;
+  user-select: none;
+}
+
+/* ==========================================================================
+   CUSTOM CURSOR
+   ========================================================================== */
+.custom-cursor {
+  width: 8px;
+  height: 8px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  transition: width 0.2s, height 0.2s;
+}
+
+.custom-cursor-glow {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: radial-gradient(circle, rgba(229, 193, 88, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+  border-radius: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.1s ease-out;
+}
+
+body:active .custom-cursor {
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-accent-gold);
+}
+
+body:active .custom-cursor-glow {
+  transform: translate(-50%, -50%) scale(0.8);
+  border-color: var(--color-accent-gold);
+}
+
+/* ==========================================================================
+   CANVAS BACKGROUND
+   ========================================================================== */
+#cosmicCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   GLASSMORPHISM PATTERNS
+   ========================================================================== */
+.glass {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--color-glass-glow);
+  border-radius: 16px;
+}
+
+/* ==========================================================================
+   AUDIO WIDGET
+   ========================================================================== */
+.audio-control-widget {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: fadeInDown 1s 1.5s forwards cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.audio-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.audio-btn i {
+  font-size: 12px;
+  color: var(--color-accent-gold);
+}
+
+.audio-btn:hover {
+  color: var(--color-accent-gold);
+  text-shadow: 0 0 8px rgba(229, 193, 88, 0.4);
+}
+
+.volume-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 0;
+  overflow: hidden;
+  transition: width 0.4s ease;
+}
+
+.audio-control-widget:hover .volume-slider-container {
+  width: 100px;
+}
+
+.volume-icon {
+  font-size: 10px;
+  color: var(--color-text-secondary);
+}
+
+#volumeSlider {
+  width: 70px;
+  height: 3px;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.2);
+  outline: none;
+  border-radius: 2px;
+}
+
+#volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-accent-gold);
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(229, 193, 88, 0.6);
+}
+
+/* ==========================================================================
+   PREMIUM BUTTONS
+   ========================================================================== */
+.btn-premium {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--color-text-primary);
+  padding: 14px 28px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 40px;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+  backdrop-filter: blur(8px);
+}
+
+.btn-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.btn-premium:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.btn-premium:hover .btn-glow {
+  transform: translate(-50%, -50%) scale(1.5);
+}
+
+.btn-premium:active {
+  transform: translateY(0);
+}
+
+.btn-premium.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(15px);
+}
+
+/* ==========================================================================
+   EXPERIENCE CONTAINER & STAGES
+   ========================================================================== */
+.experience-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+}
+
+.stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 1.2s;
+}
+
+.stage.active {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+/* ==========================================================================
+   STAGE 0: INTRO
+   ========================================================================== */
+.intro-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  max-width: 600px;
+  padding: 20px;
+}
+
+.intro-text-wrapper {
+  position: relative;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.intro-text {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--color-accent-silver);
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================================================
+   STAGE 1: REVEAL JACI
+   ========================================================================== */
+.reveal-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.target-name {
+  font-family: var(--font-serif);
+  font-size: 84px;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+  margin-right: -0.2em; /* offset letter-spacing on last char */
+}
+
+.reveal-subtitle {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* ==========================================================================
+   STAGE 2: LETTER (3D ENVELOPE)
+   ========================================================================== */
+.letter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  max-width: 600px;
+  perspective: 1500px;
+  padding: 20px;
+}
+
+.envelope-wrapper {
+  position: relative;
+  width: 450px;
+  height: 300px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+.envelope {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #12122b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+.envelope .flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 225px solid transparent;
+  border-right: 225px solid transparent;
+  border-top: 150px solid #1a1a3a;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  transform-origin: top;
+  z-index: 3;
+  transition: transform 0.6s ease;
+}
+
+.envelope .pocket {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 225px solid #141432;
+  border-right: 225px solid #141432;
+  border-bottom: 150px solid #161636;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  z-index: 2;
+}
+
+/* Custom visual seal on flap */
+.envelope::after {
+  content: '✦';
+  position: absolute;
+  top: 135px;
+  left: calc(50% - 15px);
+  width: 30px;
+  height: 30px;
+  background-color: var(--color-accent-gold);
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  z-index: 4;
+  box-shadow: 0 4px 10px rgba(229,193,88,0.5);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.envelope-wrapper.open .flap {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+
+.envelope-wrapper.open::after {
+  opacity: 0;
+  transform: scale(0.5);
+  pointer-events: none;
+}
+
+/* The actual paper inside */
+.letter {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  width: 420px;
+  height: 280px;
+  background: #fdfbf7;
+  color: #1a1a1a;
+  border-radius: 4px;
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  z-index: 1;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), z-index 0.6s;
+  overflow: hidden;
+}
+
+.letter-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Scrollbar for letter paper */
+.letter-inner::-webkit-scrollbar {
+  width: 4px;
+}
+.letter-inner::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05);
+}
+.letter-inner::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 2px;
+}
+
+.envelope-wrapper.open .letter {
+  transform: translateY(-160px) translateZ(50px);
+  height: 440px;
+  z-index: 5;
+}
+
+.letter-date {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.letter-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 24px;
+  color: #0f0f1a;
+  margin-bottom: 16px;
+}
+
+.letter-text {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: #2c2c35;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.letter-signature {
+  margin-top: 16px;
+  font-style: italic;
+  font-weight: 600;
+  text-align: right;
+  color: #1a1a1a;
+}
+
+.letter-instructions {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================================================
+   STAGE 3: GARDEN OF FLOWERS
+   ========================================================================== */
+.garden-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.garden-header {
+  position: absolute;
+  top: 40px;
+  z-index: 10;
+  padding: 16px 28px;
+  text-align: center;
+  max-width: 90%;
+  pointer-events: none;
+}
+
+.garden-header h2 {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+
+.garden-header p {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.counter-display {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--color-accent-rose);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+#gardenCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.garden-message {
+  position: absolute;
+  bottom: 80px;
+  z-index: 15;
+  padding: 24px 36px;
+  text-align: center;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.garden-message p {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--color-accent-rose);
+}
+
+.garden-message.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+}
+
+/* ==========================================================================
+   STAGE 4: TRAITS CONSTELLATION
+   ========================================================================== */
+.constellation-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.constellation-header {
+  position: absolute;
+  top: 40px;
+  z-index: 10;
+  padding: 16px 28px;
+  text-align: center;
+  max-width: 90%;
+  pointer-events: none;
+}
+
+.constellation-header h2 {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+
+.constellation-header p {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.traits-counter {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--color-accent-gold);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.stars-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 8;
+}
+
+.constellation-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.constellation-lines line {
+  stroke: rgba(229, 193, 88, 0.15);
+  stroke-width: 1;
+  stroke-dasharray: 4, 4;
+  animation: dashOffset 10s linear infinite;
+  transition: var(--transition-smooth);
+}
+
+.constellation-lines line.active {
+  stroke: rgba(255, 255, 255, 0.6);
+  stroke-width: 1.5;
+  stroke-dasharray: none;
+  filter: drop-shadow(0 0 5px rgba(255,255,255,0.8));
+}
+
+@keyframes dashOffset {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+/* Constellation Interactive Nodes */
+.star-node {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  transform: translate(-50%, -50%);
+}
+
+.star-point {
+  width: 8px;
+  height: 8px;
+  background-color: rgba(255,255,255,0.4);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255,255,255,0.5);
+  transition: var(--transition-smooth);
+}
+
+.star-label {
+  position: absolute;
+  top: 24px;
+  white-space: nowrap;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  opacity: 0;
+  transform: translateY(5px);
+  transition: var(--transition-smooth);
+  pointer-events: none;
+}
+
+/* Hover & Active States */
+.star-node:hover .star-point {
+  background-color: var(--color-accent-gold);
+  transform: scale(1.5);
+  box-shadow: 0 0 15px var(--color-accent-gold);
+}
+
+.star-node:hover .star-label {
+  opacity: 0.8;
+  transform: translateY(0);
+  color: var(--color-text-primary);
+}
+
+.star-node.active .star-point {
+  background-color: #fff;
+  transform: scale(1.8);
+  box-shadow: 0 0 20px #fff, 0 0 35px var(--color-accent-gold);
+}
+
+.star-node.active .star-label {
+  opacity: 1;
+  transform: translateY(0);
+  color: var(--color-accent-gold);
+  font-weight: 500;
+  text-shadow: 0 0 8px rgba(229,193,88,0.4);
+}
+
+.constellation-completion {
+  position: absolute;
+  bottom: 80px;
+  z-index: 15;
+  padding: 24px 36px;
+  text-align: center;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.constellation-completion h3 {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--color-accent-gold);
+}
+
+.constellation-completion p {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.constellation-completion.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+}
+
+/* ==========================================================================
+   STAGE 5: FINAL
+   ========================================================================== */
+.final-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.final-content {
+  max-width: 550px;
+  width: 100%;
+  padding: 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  z-index: 10;
+  animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.final-title {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: #fff;
+  text-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
+
+.final-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.final-p {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.final-p.highlighted {
+  font-size: 22px;
+  font-style: italic;
+  color: var(--color-accent-gold);
+  text-shadow: 0 0 10px rgba(229,193,88,0.3);
+  margin: 10px 0;
+}
+
+.final-content.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.95);
+  transition: var(--transition-smooth);
+}
+
+.final-epilogue {
+  position: absolute;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 12;
+  animation: fadeIn 2s forwards;
+}
+
+.final-epilogue.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.epilogue-title {
+  font-family: var(--font-serif);
+  font-size: 48px;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.1em;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255,255,255,0.4);
+}
+
+.epilogue-subtitle {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--color-accent-rose);
+}
+
+/* ==========================================================================
+   ANIMATIONS & KEYFRAMES
+   ========================================================================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   MEDIA QUERIES (RESPONSIVENESS)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .audio-control-widget {
+    top: auto;
+    bottom: 24px;
+    right: 24px;
+    background: rgba(10, 10, 25, 0.8); /* higher opacity on mobile */
+  }
+  
+  .audio-control-widget:hover .volume-slider-container {
+    width: 0; /* disable volume expansion on mobile to avoid layout breaking */
+  }
+
+  .target-name {
+    font-size: 54px;
+  }
+
+  .envelope-wrapper {
+    width: 320px;
+    height: 220px;
+  }
+
+  .envelope .flap {
+    border-left-width: 160px;
+    border-right-width: 160px;
+    border-top-width: 110px;
+  }
+
+  .envelope .pocket {
+    border-left-width: 160px;
+    border-right-width: 160px;
+    border-bottom-width: 110px;
+  }
+
+  .envelope::after {
+    top: 95px;
+  }
+
+  .letter {
+    width: 290px;
+    height: 200px;
+    padding: 16px;
+  }
+
+  .envelope-wrapper.open .letter {
+    transform: translateY(-110px) translateZ(30px);
+    height: 300px;
+  }
+
+  .letter-title {
+    font-size: 18px;
+  }
+
+  .letter-text {
+    font-size: 13px;
+  }
+
+  .final-content {
+    padding: 24px;
+  }
+
+  .final-title {
+    font-size: 28px;
+  }
+
+  .final-p {
+    font-size: 15px;
+  }
+
+  .final-p.highlighted {
+    font-size: 18px;
+  }
+  
+  /* Disable custom cursor on mobile touch devices */
+  .custom-cursor,
+  .custom-cursor-glow {
+    display: none;
+  }
+}

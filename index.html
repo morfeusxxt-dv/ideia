@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary Meta Tags -->
+  <title>Um Pequeno Universo para Jaci</title>
+  <meta name="title" content="Um Pequeno Universo para Jaci">
+  <meta name="description" content="Um espaço minimalista, interativo e poético criado especialmente para celebrar a Jaci. Explore a lua, estrelas e sentimentos reais.">
+  <meta name="author" content="Antigravity">
+  
+  <!-- Open Graph / Facebook / WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jaci-universo.vercel.app/">
+  <meta property="og:title" content="Um Pequeno Universo para Jaci">
+  <meta property="og:description" content="Um espaço minimalista, interativo e poético criado especialmente para celebrar a Jaci. Explore a lua, estrelas e sentimentos reais.">
+  <meta property="og:image" content="https://jaci-universo.vercel.app/assets/favicon.svg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://jaci-universo.vercel.app/">
+  <meta property="twitter:title" content="Um Pequeno Universo para Jaci">
+  <meta property="twitter:description" content="Um espaço minimalista, interativo e poético criado especialmente para celebrar a Jaci. Explore a lua, estrelas e sentimentos reais.">
+  <meta property="twitter:image" content="https://jaci-universo.vercel.app/assets/favicon.svg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome for elegant icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Custom Cursor Glow -->
+  <div class="custom-cursor" id="customCursor"></div>
+  <div class="custom-cursor-glow" id="customCursorGlow"></div>
+
+  <!-- Audio Player Elements -->
+  <audio id="bgMusic" loop>
+    <source src="assets/ambient.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Canvas Background for Cosmic Effects -->
+  <canvas id="cosmicCanvas"></canvas>
+
+  <!-- Ambient Audio Controls -->
+  <div class="audio-control-widget glass" id="audioWidget">
+    <button class="audio-btn" id="audioToggleBtn" title="Ativar música">
+      <i class="fas fa-music"></i>
+      <span class="btn-text">Ativar música</span>
+    </button>
+    <div class="volume-slider-container">
+      <i class="fas fa-volume-down volume-icon"></i>
+      <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.5">
+      <i class="fas fa-volume-up volume-icon"></i>
+    </div>
+  </div>
+
+  <!-- Main Experience Wrapper -->
+  <main class="experience-container">
+
+    <!-- STAGE 0: Intro (Black Screen, Stars Birth) -->
+    <section class="stage active" id="stage-intro">
+      <div class="intro-content">
+        <div class="intro-text-wrapper">
+          <p class="intro-text" id="intro-p1">Algumas pessoas inspiram mensagens.</p>
+          <p class="intro-text" id="intro-p2">Outras inspiram algo muito maior.</p>
+        </div>
+        <button class="btn-premium hidden" id="btn-start">
+          <span class="btn-glow"></span>
+          <span class="btn-content">Começar experiência</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- STAGE 1: Reveal Jaci + Heart Constellation -->
+    <section class="stage" id="stage-reveal">
+      <div class="reveal-content">
+        <h1 class="target-name" id="reveal-name"></h1>
+        <p class="reveal-subtitle" id="reveal-subtitle">o brilho mais bonito do céu.</p>
+        <button class="btn-premium hidden" id="btn-to-letter">
+          <span class="btn-glow"></span>
+          <span class="btn-content">Abrir correspondência <i class="fas fa-arrow-right"></i></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- STAGE 2: Envelope / Letter 3D -->
+    <section class="stage" id="stage-letter">
+      <div class="letter-container">
+        <!-- 3D Envelope Wrapper -->
+        <div class="envelope-wrapper" id="envelopeWrapper">
+          <div class="envelope">
+            <div class="flap"></div>
+            <div class="pocket"></div>
+            <div class="letter" id="interactiveLetter">
+              <div class="letter-inner">
+                <span class="letter-date">Julho de 2026</span>
+                <h2 class="letter-title">Para Jaci,</h2>
+                <div class="letter-text">
+                  <p>Às vezes, nos perdemos na correria do dia a dia e esquecemos de apreciar a beleza das coisas simples. O céu à noite, com toda a sua imensidão, sempre nos lembra de como somos pequenos, mas também de como certos encontros são raros e preciosos.</p>
+                  <p>Seu nome carrega a força e a luz da Lua, aquela que ilumina os caminhos escuros e inspira poetas há gerações. Criar este pequeno espaço digital foi uma forma sincera de dedicar tempo, carinho e criatividade para tentar retribuir, mesmo que minimamente, a energia boa e a luz que você transmite naturalmente.</p>
+                  <p>Espero que cada detalhe deste pequeno universo faça você sorrir e lembrar que sua presença é capaz de inspirar coisas belas. Obrigado por ser essa pessoa única.</p>
+                  <p class="letter-signature">Com carinho e admiração.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="letter-instructions">
+          <p id="envelope-tip">Clique no envelope para abrir a carta</p>
+        </div>
+
+        <button class="btn-premium hidden" id="btn-to-garden">
+          <span class="btn-glow"></span>
+          <span class="btn-content">Visitar o jardim <i class="fas fa-seedling"></i></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- STAGE 3: Garden of Flowers -->
+    <section class="stage" id="stage-garden">
+      <div class="garden-wrapper">
+        <div class="glass-panel garden-header">
+          <h2>Um Jardim para Florescer</h2>
+          <p>Clique em qualquer lugar da tela para plantar uma flor. Dê vida a este espaço.</p>
+          <div class="counter-display"><span id="flower-count">0</span> / 30 flores</div>
+        </div>
+
+        <!-- Canvas specifically for drawing flowers that sway -->
+        <canvas id="gardenCanvas"></canvas>
+
+        <div class="garden-message glass hidden" id="garden-msg">
+          <p>Algumas pessoas conseguem fazer flores nascerem sem perceber.</p>
+          <button class="btn-premium" id="btn-to-constellation">
+            <span class="btn-glow"></span>
+            <span class="btn-content">Olhar para as estrelas <i class="fas fa-star"></i></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 4: Traits Constellation -->
+    <section class="stage" id="stage-constellation">
+      <div class="constellation-wrapper">
+        <div class="glass-panel constellation-header">
+          <h2>Suas Estrelas Guia</h2>
+          <p>Clique nas estrelas dispersas no céu para descobrir e conectar suas maiores qualidades.</p>
+          <div class="traits-counter"><span id="traits-count">0</span> / 7 qualidades</div>
+        </div>
+
+        <div class="stars-container" id="starsContainer">
+          <!-- Active qualities will appear as clickable nodes here -->
+        </div>
+
+        <!-- SVG overlay to draw connecting constellation lines -->
+        <svg class="constellation-lines" id="constellationSvg"></svg>
+
+        <div class="constellation-completion glass hidden" id="constellation-msg">
+          <h3>Sua Constelação está Completa</h3>
+          <p>Todas as suas luzes se conectam formando a constelação de Jaci.</p>
+          <button class="btn-premium" id="btn-to-final">
+            <span class="btn-glow"></span>
+            <span class="btn-content">Seguir a Lua <i class="fas fa-moon"></i></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 5: Final Screen (Big Moon, Ending Message) -->
+    <section class="stage" id="stage-final">
+      <div class="final-wrapper">
+        <div class="final-content glass">
+          <h2 class="final-title">Jaci...</h2>
+          <div class="final-text-container">
+            <p class="final-p">Algumas pessoas passam pela nossa vida como estrelas.</p>
+            <p class="final-p">Bonitas. Distantes.</p>
+            <p class="final-p">Mas algumas conseguem iluminar tudo ao redor.</p>
+            <p class="final-p highlighted">Você é uma delas.</p>
+            <p class="final-p">Obrigado por dedicar alguns minutos para conhecer este pequeno universo que criei pensando em você. Espero que possamos criar boas memórias juntos.</p>
+          </div>
+          
+          <button class="btn-premium" id="btn-final-action">
+            <span class="btn-glow"></span>
+            <span class="btn-content">✨ Gostei da experiência</span>
+          </button>
+        </div>
+
+        <div class="final-epilogue hidden" id="final-epilogue">
+          <h2 class="epilogue-title">Fim...</h2>
+          <p class="epilogue-subtitle">ou talvez apenas o começo.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <!-- Script Logic -->
+  <script src="script.js"></script>
+</body>
+</html>
